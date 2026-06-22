@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PELES — LLM Response Ranker</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script src="assets/config.js"></script>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">PELES</span>
+      <span class="brand-sub">LLM Response Ranking</span>
+    </div>
+    <div class="badges">
+      <span class="badge" id="backend-badge">checking backend…</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="intro">
+      <h1>Which model answered better?</h1>
+      <p>
+        Enter two model names and the responses they produced for the same prompt.
+        PELES ranks them with a Gemma-2-9B classifier (LoRA fine-tuned, 4-bit
+        quantized) and tells you the winner — with calibrated confidence.
+      </p>
+    </section>
+
+    <section class="panel">
+      <form id="evaluate-form">
+        <div class="prompt-row">
+          <label for="prompt">Prompt <span class="optional">(optional, improves accuracy)</span></label>
+          <textarea id="prompt" rows="2" placeholder="What was the original question or instruction?"></textarea>
+        </div>
+
+        <div class="model-grid">
+          <div class="model-col" data-side="a">
+            <label for="model-a-name">Model A name</label>
+            <input id="model-a-name" type="text" placeholder="e.g. GPT-4o" required maxlength="120" />
+
+            <label for="response-a">Response A</label>
+            <textarea id="response-a" rows="9" placeholder="Paste Model A's response…" required></textarea>
+          </div>
+
+          <div class="vs-divider"><span>VS</span></div>
+
+          <div class="model-col" data-side="b">
+            <label for="model-b-name">Model B name</label>
+            <input id="model-b-name" type="text" placeholder="e.g. Claude 3.5 Sonnet" required maxlength="120" />
+
+            <label for="response-b">Response B</label>
+            <textarea id="response-b" rows="9" placeholder="Paste Model B's response…" required></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="evaluate-btn">
+            <span class="btn-label">Evaluate</span>
+            <span class="btn-spinner" hidden></span>
+          </button>
+          <span class="error-text" id="error-text"></span>
+        </div>
+      </form>
+
+      <div class="result" id="result" hidden>
+        <div class="result-header">
+          <span class="result-trophy">🏆</span>
+          <div>
+            <div class="result-title">Winner</div>
+            <div class="result-winner" id="result-winner">—</div>
+          </div>
+        </div>
+
+        <div class="prob-bars">
+          <div class="prob-row">
+            <span class="prob-label" id="prob-label-a">Model A</span>
+            <div class="prob-track"><div class="prob-fill prob-fill-a" id="prob-fill-a"></div></div>
+            <span class="prob-value" id="prob-value-a">0%</span>
+          </div>
+          <div class="prob-row">
+            <span class="prob-label" id="prob-label-b">Model B</span>
+            <div class="prob-track"><div class="prob-fill prob-fill-b" id="prob-fill-b"></div></div>
+            <span class="prob-value" id="prob-value-b">0%</span>
+          </div>
+          <div class="prob-row">
+            <span class="prob-label">Tie</span>
+            <div class="prob-track"><div class="prob-fill prob-fill-tie" id="prob-fill-tie"></div></div>
+            <span class="prob-value" id="prob-value-tie">0%</span>
+          </div>
+        </div>
+
+        <div class="result-meta">
+          <span id="meta-backend"></span>
+          <span id="meta-latency"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Predictive LLM response ranking — Gemma-2-9B · LoRA · 4-bit NF4 quantization · FastAPI
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

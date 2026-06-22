@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# model artifacts (large, never committed)
+backend/output/
+*.safetensors
+*.bin
+checkpoint-*/
+
+.env
+.DS_Store
+node_modules/
